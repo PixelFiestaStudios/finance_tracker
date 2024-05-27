@@ -23,42 +23,41 @@ Finance Tracker is a personal finance application built with Django and integrat
    ```sh
    git clone https://github.com/PixelFiestaStudios/finance_tracker.git
    cd finance_tracker
+   
 2. Create and Activate a Virtual Environment
 
-sh
-Copy code
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
+```sh
+   python -m venv venv
+   source venv/bin/activate  # On Windows: venv\Scripts\activate
+
+```
 
 3. Install Dependencies
-
-sh
-Copy code
-pip install -r requirements.txt
-Set Up Plaid API Credentials
+   
+```
+   pip install -r requirements.txt
+   Set Up Plaid API Credentials
+```
 
 4. Add your Plaid API credentials to the settings.py file:
 
-python
-Copy code
-PLAID_CLIENT_ID = 'your_client_id'
-PLAID_SECRET = 'your_secret'
-PLAID_ENVIRONMENT = 'sandbox'  # or 'development' or 'production'
+```sh
+   PLAID_CLIENT_ID = 'your_client_id'
+   PLAID_SECRET = 'your_secret'
+   PLAID_ENVIRONMENT = 'sandbox'  # or 'development' or 'production'
 
-5.Run Migrations
-
-sh
-Copy code
-python manage.py makemigrations
-python manage.py migrate
+```
+5. Run Migrations
+```
+   python manage.py makemigrations
+   python manage.py migrate
+```
 
 6. Run the Development Server
-
-sh
-Copy code
-python manage.py runserver
-
-Access the Application
+```
+   python manage.py runserver
+```
+7. Access the Application
 
 Open your web browser and navigate to http://127.0.0.1:8000.
 
