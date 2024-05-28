@@ -1,20 +1,63 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Finance Tracker</title>
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
 </head>
 <body>
-    <h1>Connect your Bank Account</h1>
-    <form method="post">
-        {% csrf_token %}
-        <input type="text" name="public_token" placeholder="Public Token">
-        <button type="submit">Submit</button>
-    </form>
-    <h2>Transactions</h2>
-    <ul>
-    {% for transaction in transactions %}
-        <li>{{ transaction.name }}: ${{ transaction.amount }} on {{ transaction.date }}</li>
-    {% endfor %}
-    </ul>
+    <header>
+        <h1>Finance Tracker</h1>
+    </header>
+    <main>
+        <h2>Link your bank account</h2>
+        <button id="link-account">Link Account</button>
+        <script src="https://cdn.plaid.com/link/v2/stable/link-initialize.js"></script>
+        <script>
+            document.getElementById('link-account').addEventListener('click', function() {
+                fetch('{% url "create_link_token" %}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    },
+                    body: JSON.stringify({})
+                })
+                .then(response => response.json())
+                .then(data => {
+                    const handler = Plaid.create({
+                        token: data.link_token,
+                        onSuccess: function(public_token, metadata) {
+                            // Send the public_token to your server
+                            fetch('{% url "exchange_public_token" %}', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'X-CSRFToken': '{{ csrf_token }}'
+                                },
+                                body: JSON.stringify({public_token: public_token})
+                            }).then(response => response.json())
+                            .then(data => {
+                                console.log(data);
+                            }).catch(error => {
+                                console.error('Error:', error);
+                            });
+                        },
+                        onExit: function(err, metadata) {
+                            if (err != null) {
+                                console.error(err);
+                            }
+                        }
+                    });
+                    handler.open();
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+            });
+        </script>
+    </main>
 </body>
 </html>
