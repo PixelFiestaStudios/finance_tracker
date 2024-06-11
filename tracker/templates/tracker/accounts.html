@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Linked Accounts</title>
+</head>
+<body>
+    <h1>Linked Accounts</h1>
+    <ul>
+        {% for account in accounts %}
+            <li>{{ account.name }}: {{ account.balances.available }} {{ account.balances.iso_currency_code }}</li>
+        {% endfor %}
+    </ul>
+    <a href="{% url 'transactions' %}">View Transactions</a>
+</body>
+</html>
